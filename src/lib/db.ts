@@ -33,6 +33,12 @@ export interface ArticleRow {
   first_seen_at: string;
   status: ArticleStatus;
   raw_html: string;
+  post_text: string | null;
+  image_path: string | null;
+  post_urn: string | null;
+  posted_at: string | null;
+  last_error: string | null;
+  updated_at: string | null;
 }
 
 export interface RunRow {
@@ -128,6 +134,19 @@ function migrate(db: Database.Database): void {
           key   TEXT PRIMARY KEY,
           value TEXT NOT NULL
         );
+      `);
+    },
+    // 2 — Felder für den fertigen Post: Text, Bild, Ergebnis
+    (d) => {
+      d.exec(`
+        ALTER TABLE articles ADD COLUMN post_text   TEXT;
+        ALTER TABLE articles ADD COLUMN image_path  TEXT;
+        ALTER TABLE articles ADD COLUMN post_urn    TEXT;
+        ALTER TABLE articles ADD COLUMN posted_at   TEXT;
+        ALTER TABLE articles ADD COLUMN last_error  TEXT;
+        ALTER TABLE articles ADD COLUMN updated_at  TEXT;
+        CREATE UNIQUE INDEX idx_articles_post_urn
+          ON articles(post_urn) WHERE post_urn IS NOT NULL;
       `);
     },
   ];

@@ -76,8 +76,23 @@ einmal `ETag` oder `Last-Modified` geliefert hat. Stand 15.09.2026 sendet
 unit.cloud **keine** dieser beiden Header, der bedingte Abruf läuft daher
 derzeit ins Leere.
 
+## Die Maske
+
+| Seite | Inhalt |
+|---|---|
+| `/` | Statuskacheln, letzte 20 Artikel, „Jetzt scrapen", roter Notaus |
+| `/artikel/[id]` | Originalartikel links, editierbarer Post mit Vorschau rechts |
+| `/verlauf` | Artikel mit Sendeversuch, Fehlertexte, „Erneut versuchen", Protokoll |
+| `/einstellungen` | Zeitfenster, Tageslimit, Intervall, Hashtags, Textvorlage |
+
+Alle Schreibvorgänge laufen über Server Actions direkt gegen SQLite.
+
+Was erst später scharf geschaltet wird, ist in der Maske als solches
+gekennzeichnet und deaktiviert: Bildpipeline (Stufe 3), „Jetzt posten" und die
+LinkedIn-Verbindung (Stufe 4), die Cron-Jobs (Stufe 5).
+
 ## Stand
 
-Stufen 0 und 1 sind umgesetzt: Repo-Setup, Scraper, Datenhaltung. Die Maske
-folgt in Stufe 2, Textkomposition und Bildpipeline in Stufe 3, die
-LinkedIn-Anbindung in Stufe 4 und die Automatik in Stufe 5.
+Stufen 0 bis 2 sind umgesetzt: Repo-Setup, Scraper, Datenhaltung, Maske.
+Textkomposition und Bildpipeline folgen in Stufe 3, die LinkedIn-Anbindung in
+Stufe 4 und die Automatik in Stufe 5.
