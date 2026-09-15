@@ -32,6 +32,7 @@ Die Maske läuft dann auf <http://localhost:3000>.
 | `npm run build` | Produktions-Build |
 | `npm run start` | Produktionsserver (nach `build`) |
 | `npm run lint` | ESLint |
+| `npm run scrape` | Manueller Scrape-Lauf, gibt die Artikeltabelle aus |
 
 ## Projektstruktur
 
@@ -55,8 +56,28 @@ ausschließlich in `.env.local` und niemals ins Repository.
 Wichtig: `LINKEDIN_DRY_RUN=true` ist die Voreinstellung. Erst wenn die
 geloggten Requests geprüft sind, wird auf `false` umgestellt.
 
+## Erstlauf-Schutz
+
+Beim allerersten `npm run scrape` werden alle bereits vorhandenen Artikel mit
+Status `skipped` importiert und dadurch nie gepostet. Gemerkt wird das über den
+Schlüssel `initial_import_done` in der Tabelle `settings`. Nur Artikel, die
+*danach* neu auftauchen, bekommen Status `new` und laufen in die Automatik.
+
+Wird `data/app.db` gelöscht, beginnt alles von vorn — inklusive Erstlauf-Schutz.
+
+## Schonendes Scrapen
+
+Ein einziger GET pro Lauf, nie parallel (In-Process-Sperre), 20 s Timeout,
+User-Agent `unit.cloud-autoposter/1.0 (+https://unit.cloud)`. Bei HTTP 429 oder
+5xx bricht der Lauf ab, statt nachzufassen.
+
+`If-None-Match` und `If-Modified-Since` werden gesendet, sobald der Server
+einmal `ETag` oder `Last-Modified` geliefert hat. Stand 15.09.2026 sendet
+unit.cloud **keine** dieser beiden Header, der bedingte Abruf läuft daher
+derzeit ins Leere.
+
 ## Stand
 
-Stufe 0 (Repo-Setup) ist umgesetzt. Die Maske ist noch leer; Scraper,
-Datenhaltung, Textkomposition, Bildpipeline, LinkedIn-Anbindung und Automatik
-folgen in den Stufen 1 bis 5.
+Stufen 0 und 1 sind umgesetzt: Repo-Setup, Scraper, Datenhaltung. Die Maske
+folgt in Stufe 2, Textkomposition und Bildpipeline in Stufe 3, die
+LinkedIn-Anbindung in Stufe 4 und die Automatik in Stufe 5.

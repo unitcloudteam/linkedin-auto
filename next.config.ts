@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Native Module dürfen nicht gebündelt werden, sonst findet Next die
+  // vorkompilierten Binaries nicht.
+  serverExternalPackages: ["better-sqlite3", "sharp"],
 };
 
 export default nextConfig;
