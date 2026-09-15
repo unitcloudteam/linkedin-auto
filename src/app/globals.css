@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+/* Ruhige Farbpalette, Dark/Light automatisch nach Systemeinstellung */
+:root {
+  --background: #f7f8fa;
+  --surface: #ffffff;
+  --border: #e3e6ea;
+  --foreground: #16181d;
+  --muted: #5d6470;
+  --accent: #0a66c2; /* unit.cloud- bzw. LinkedIn-Blau */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0e1116;
+    --surface: #161a21;
+    --border: #262c36;
+    --foreground: #e7e9ec;
+    --muted: #949cab;
+    --accent: #4f9ae8;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+}
